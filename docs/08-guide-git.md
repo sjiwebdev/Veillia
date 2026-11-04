@@ -275,7 +275,7 @@ Nom du repos : `veillia`.
 Récupérer l'adresse du dépôt, puis :
 
 ```powershell
-git remote add origin https://github.com/teuzem/veillia.git
+git remote add origin https://github.com/sjiwebdev/Veillia.git
 git remote -v
 ```
 
