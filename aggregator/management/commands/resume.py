@@ -9,8 +9,7 @@ from aggregator.models import Article
 class Command(BaseCommand):
     help = (
         "Génère le résumé (champ `resume`) des articles qui n'en ont pas, avec Gemini.\n"
-        "S'arrête proprement quand le quota gratuit est atteint ; relancez plus tard.\n"
-        "Pour tester sur UN article : --id <numéro> (ajoutez --dry-run pour ne rien enregistrer)."
+        "S'arrête lorsque le quota gratuit est atteint et utilise openrouteur en secours"
     )
 
     def add_arguments(self, parser):
@@ -27,8 +26,6 @@ class Command(BaseCommand):
     def selection(self, options):
         if options["id"] is not None:
             return list(Article.objects.filter(pk=options["id"]))
-        # On retravaille les resumes encore issus du flux RSS : ce sont eux qui
-        # doivent etre reformules par le modele.
         return list(
             Article.objects.visibles()
             .filter(origine_resume="flux")
@@ -63,9 +60,7 @@ class Command(BaseCommand):
                     return
                 if llm.est_court(article.resume):
                     self.stdout.write(self.style.WARNING(
-                        f"Contenu court (moins de {llm.SEUIL_COURT} caractères) : il est recopié "
-                        "tel quel comme résumé, sans appel à Gemini. Choisissez un article plus long "
-                        "pour tester le LLM."
+                        f"Contenu court (moins de {llm.SEUIL_COURT} caractères) : il est recopié identique"
                     ))
             contenu_court = llm.est_court(article.resume)
             try:
@@ -84,19 +79,18 @@ class Command(BaseCommand):
 
             erreurs_de_suite = 0
             if un_seul or dry_run:
-                self.stdout.write(f"\nRésumé ---\n{resume}\n")
+                self.stdout.write(f"\nRésumé {resume}\n")
             if resume:
                 if not dry_run:
                     article.resume = resume
-                    # Un texte deja court est recopie tel quel : il ne vient pas
-                    # du modele, on garde donc l'origine "flux".
+                    # Un texte deja court est recopie tel quel.
                     article.origine_resume = "flux" if contenu_court else "agent"
                     article.save(update_fields=["resume", "origine_resume"])
                 ok += 1
                 if not un_seul:
                     self.stdout.write(f"{article.titre[:70]}")
             if not contenu_court and len(articles) > 1:
-                time.sleep(pause)  # respecte les limites par minute du plan gratuit
+                time.sleep(pause)  # respect des limites par minute du plan gratuit
 
         fin = "essai terminé, rien enregistré" if dry_run else "terminé"
         self.stdout.write(self.style.SUCCESS(f"{fin.capitalize()} : {ok} résumé(s), {erreurs} erreur(s)."))
