@@ -1,8 +1,4 @@
-"""Classe les articles deja enregistres dans les bonnes familles.
-
-A lancer apres un import de sources quand la base contient beaucoup
-d'articles qui n'ont pas encore de famille.
-"""
+"Classe les articles deja enregistres dans les bonnes familles."
 
 from django.core.management.base import BaseCommand
 
