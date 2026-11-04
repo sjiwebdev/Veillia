@@ -1,0 +1,40 @@
+[project]
+name = "veillia"
+version = "1.0.0"
+description = "VEILLIA - agregateur d'articles de data science et d'intelligence artificielle"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django>=5.2.18",
+    "djangorestframework>=3.18.3",
+    "django-filter>=26.2",
+    "drf-spectacular>=0.30.0",
+    "django-cors-headers>=4.9.0",
+    "python-dotenv>=1.2.4",
+    "feedparser>=6.0.14",
+    "requests>=2.34.2",
+    "beautifulsoup4>=4.15.0",
+    "djangorestframework-simplejwt>=5.5.1",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
+]
+# Le moteur d'embedding est optionnel : le site fonctionne sans lui.
+embeddings = [
+    "sentence-transformers>=6.2.0",
+    "torch>=2.15.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+# les migrations sont generees par Django, on ne les relit pas
+exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
