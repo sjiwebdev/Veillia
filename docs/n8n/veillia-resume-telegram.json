@@ -1,0 +1,156 @@
+{
+  "name": "VEILLIA - resume quotidien Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
+            }
+          ]
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Chaque matin a 7h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-620, 0]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.VEILLIA_URL }}/api/resumes/?etat=en_attente",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.VEILLIA_JETON }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Lire les resumes en attente",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-380, 0],
+      "notes": "Le jeton vient du credential ou de la variable d'environnement VEILLIA_JETON"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transforme la reponse paginee en une liste de messages Telegram\nconst corps = $input.first().json.body ?? $input.first().json;\nconst lignes = corps.results ?? corps;\n\nconst messages = lignes\n  .filter((l) => l.canal === 'telegram')\n  .map((l) => {\n    const ligne = l;\n    const articles = ligne.articles ?? [];\n    const liste = articles\n      .map((article, index) => {\n        const numero = index + 1;\n        const resume = (article.resume ?? '').slice(0, 160);\n        return `${numero}. <b>${article.titre}</b>\\n${resume}\\nSource : ${article.source.nom}`;\n      })\n      .join('\\n\\n');\n\n    const texte =\n      `Bonjour ${ligne.utilisateur}, voici votre veille data et IA du ${ligne.jour}.\\n\\n${liste}\\n\\n` +\n      'Voir toutes mes recommandations : https://veillia.com/pour-vous';\n\n    return {\n      resume_id: ligne.id,\n      destinataire: ligne.destinataire,\n      texte: texte\n    };\n  });\n\nreturn messages;"
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Construire les messages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-120, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Envoyer par lots de 5",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [140, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.destinataire }}",
+        "text": "={{ $json.texte }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000005",
+      "name": "Envoyer sur Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [420, -120],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "id": "a1000000-0000-4000-8000-000000000006",
+      "name": "Attendre 3 secondes",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [680, -120]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.VEILLIA_URL }}/api/resumes/{{ $json.resume_id }}/statut/",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.VEILLIA_JETON }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ etat: 'envoye', erreur: '' }) }}",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000007",
+      "name": "Marquer comme envoye",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [920, -120]
+    }
+  ],
+  "connections": {
+    "Chaque matin a 7h": {
+      "main": [[{ "node": "Lire les resumes en attente", "type": "main", "index": 0 }]]
+    },
+    "Lire les resumes en attente": {
+      "main": [[{ "node": "Construire les messages", "type": "main", "index": 0 }]]
+    },
+    "Construire les messages": {
+      "main": [[{ "node": "Envoyer par lots de 5", "type": "main", "index": 0 }]]
+    },
+    "Envoyer par lots de 5": {
+      "main": [
+        [{ "node": "Marquer comme envoye", "type": "main", "index": 0 }],
+        [{ "node": "Envoyer par lots de 5", "type": "main", "index": 0 }]
+      ]
+    },
+    "Marquer comme envoye": {
+      "main": [[{ "node": "Attendre 3 secondes", "type": "main", "index": 0 }]]
+    },
+    "Attendre 3 secondes": {
+      "main": [[{ "node": "Envoyer par lots de 5", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "b2000000-0000-4000-8000-000000000001",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}
