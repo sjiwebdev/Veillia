@@ -1,0 +1,184 @@
+{
+  "sources": [
+    {
+      "nom": "Towards Data Science",
+      "site_officiel": "https://towardsdatascience.com/",
+      "url_flux": "https://towardsdatascience.com/feed/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.9,
+      "est_verifiee": true
+    },
+    {
+      "nom": "KDnuggets",
+      "site_officiel": "https://www.kdnuggets.com/",
+      "url_flux": "https://www.kdnuggets.com/feed",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.85,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Silicon",
+      "site_officiel": "https://www.silicon.fr/",
+      "url_flux": "https://www.silicon.fr/feed",
+      "langue": "fr",
+      "pays": "France",
+      "fiabilite": 0.8,
+      "est_verifiee": true
+    },
+    {
+      "nom": "01net",
+      "site_officiel": "https://www.01net.com/",
+      "url_flux": "https://www.01net.com/feed",
+      "langue": "fr",
+      "pays": "France",
+      "fiabilite": 0.75,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Analytics Vidhya",
+      "site_officiel": "https://www.analyticsvidhya.com/",
+      "url_flux": "https://www.analyticsvidhya.com/feed/",
+      "langue": "en",
+      "pays": "Inde",
+      "fiabilite": 0.8,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Data Science Central",
+      "site_officiel": "https://www.datasciencecentral.com/",
+      "url_flux": "https://www.datasciencecentral.com/rss.xml",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.8,
+      "est_verifiee": true
+    },
+    {
+      "nom": "MarkTechPost",
+      "site_officiel": "https://www.marktechpost.com/",
+      "url_flux": "https://www.marktechpost.com/feed/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.7,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Machine Learning Mastery",
+      "site_officiel": "https://machinelearningmastery.com/",
+      "url_flux": "https://machinelearningmastery.com/feed/",
+      "langue": "en",
+      "pays": "Australie",
+      "fiabilite": 0.8,
+      "est_verifiee": true
+    },
+    {
+      "nom": "InfoQ AI ML and Data Eng",
+      "site_officiel": "https://www.infoq.com/ai-ml-data-eng/",
+      "url_flux": "https://www.infoq.com/feed/ai-ml-data-eng/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.85,
+      "est_verifiee": true
+    },
+    {
+      "nom": "STAT News",
+      "site_officiel": "https://www.statnews.com/",
+      "url_flux": "https://www.statnews.com/feed/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.85,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Google AI",
+      "site_officiel": "https://blog.google/technology/ai/",
+      "url_flux": "https://blog.google/technology/ai/rss/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.9,
+      "est_verifiee": true
+    },
+    {
+      "nom": "OpenAI",
+      "site_officiel": "https://openai.com/blog/",
+      "url_flux": "https://openai.com/blog/rss.xml",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.95,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Hugging Face",
+      "site_officiel": "https://huggingface.co/blog",
+      "url_flux": "https://huggingface.co/blog/feed.xml",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.9,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Apple Machine Learning Research",
+      "site_officiel": "https://machinelearning.apple.com/",
+      "url_flux": "https://machinelearning.apple.com/rss.xml",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.9,
+      "est_verifiee": true
+    },
+    {
+      "nom": "AWS Machine Learning Blog",
+      "site_officiel": "https://aws.amazon.com/blogs/machine-learning/",
+      "url_flux": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.85,
+      "est_verifiee": true
+    },
+    {
+      "nom": "MIT Technology Review",
+      "site_officiel": "https://www.technologyreview.com/",
+      "url_flux": "https://www.technologyreview.com/feed/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.85,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Netflix TechBlog",
+      "site_officiel": "https://netflixtechblog.com/",
+      "url_flux": "https://netflixtechblog.com/feed",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.85,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Meta Engineering",
+      "site_officiel": "https://engineering.fb.com/",
+      "url_flux": "https://engineering.fb.com/feed/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.85,
+      "est_verifiee": true
+    },
+    {
+      "nom": "arXiv Machine Learning",
+      "site_officiel": "https://arxiv.org/list/cs.LG/recent",
+      "url_flux": "https://arxiv.org/rss/cs.LG",
+      "langue": "en",
+      "pays": "International",
+      "fiabilite": 0.8,
+      "est_verifiee": true
+    },
+    {
+      "nom": "Unite.AI",
+      "site_officiel": "https://www.unite.ai/",
+      "url_flux": "https://www.unite.ai/feed/",
+      "langue": "en",
+      "pays": "Etats-Unis",
+      "fiabilite": 0.6,
+      "est_verifiee": false
+    }
+  ]
+}
