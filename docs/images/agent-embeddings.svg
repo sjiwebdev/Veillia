@@ -1,0 +1,320 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1010" viewBox="0 0 1500 1010" role="img" aria-labelledby="titre desc">
+  <title id="titre">Architecture du moteur de similarité sémantique VEILLIA</title>
+  <desc id="desc">Calcul hors ligne des vecteurs Qwen3, stockage en base, puis calcul du score de recommandation à la requête.</desc>
+
+  <defs>
+    <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <rect width="1500" height="1010" fill="#ffffff"/>
+
+  <text x="48" y="46" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151" letter-spacing="1.6">VEILLIA / MOTEUR DE RECOMMANDATION</text>
+  <text x="48" y="84" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="600" fill="#111827">Similarité sémantique des articles</text>
+  <text x="48" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#4b5563">Calcul local des vecteurs, stockage des dimensions et score de recommandation.</text>
+  <text x="1452" y="46" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#4b5563">Qwen3-Embedding-0.6B, exécution sur processeur</text>
+  <text x="1452" y="68" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#4b5563">1 024 dimensions, aucune donnée envoyée à l'extérieur</text>
+
+  <!-- Section hors ligne -->
+  <text x="48" y="156" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151" letter-spacing="1.4">CALCUL HORS LIGNE</text>
+  <text x="210" y="156" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" fill="#4b5563">commande calculer_embeddings</text>
+  <text x="1452" y="156" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" fill="#4b5563">les vecteurs sont écrits une fois puis relus</text>
+
+  <!-- Étape 1 : corpus -->
+  <rect x="48" y="172" width="268" height="294" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="48" y="172" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="48" y="206" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="70" cy="193" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="70" y="198" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">1</text>
+  <text x="88" y="199" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Corpus</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="64" y="245" font-size="12.5" font-weight="600" fill="#1f2937">Article</text>
+    <text x="64" y="265" font-size="12" fill="#4b5563">titre nettoyé</text>
+    <text x="64" y="283" font-size="12" fill="#4b5563">résumé en français</text>
+    <text x="64" y="301" font-size="12" fill="#4b5563">séparés par une ligne vide</text>
+
+    <text x="64" y="336" font-size="12.5" font-weight="600" fill="#1f2937">Famille de sujets</text>
+    <text x="64" y="356" font-size="12" fill="#4b5563">nom de la famille</text>
+    <text x="64" y="374" font-size="12" fill="#4b5563">description</text>
+    <text x="64" y="392" font-size="12" fill="#4b5563">mots-clés déclarés</text>
+
+    <text x="64" y="428" font-size="11.5" font-style="italic" fill="#4b5563">Articles visibles et sujets actifs.</text>
+    <text x="64" y="446" font-size="11.5" font-style="italic" fill="#4b5563">Les textes restent en lecture seule.</text>
+  </g>
+
+  <!-- Étape 2 : préparation -->
+  <rect x="332" y="172" width="268" height="294" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="332" y="172" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="332" y="206" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="354" cy="193" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="354" y="198" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">2</text>
+  <text x="372" y="199" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Préparation</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="348" y="245" font-size="12.5" font-weight="600" fill="#1f2937">Nettoyage</text>
+    <text x="348" y="265" font-size="12" fill="#4b5563">balises HTML retirées</text>
+    <text x="348" y="283" font-size="12" fill="#4b5563">entités décodées</text>
+    <text x="348" y="301" font-size="12" fill="#4b5563">espaces normalisés</text>
+
+    <text x="348" y="336" font-size="12.5" font-weight="600" fill="#1f2937">Troncature</text>
+    <text x="348" y="356" font-size="12" fill="#4b5563">1 800 caractères maximum</text>
+    <text x="348" y="374" font-size="12" fill="#4b5563">dans la fenêtre du modèle</text>
+
+    <text x="348" y="404" font-size="12.5" font-weight="600" fill="#1f2937">Empreinte SHA-256</text>
+    <text x="348" y="424" font-size="12" fill="#4b5563">compare le texte préparé</text>
+    <text x="348" y="442" font-size="12" fill="#4b5563">détecte une modification réelle</text>
+
+    <text x="348" y="460" font-size="11.5" font-style="italic" fill="#4b5563">Aucun recalcul inutile.</text>
+  </g>
+
+  <!-- Étape 3 : encodeur -->
+  <rect x="616" y="172" width="268" height="294" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="616" y="172" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="616" y="206" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="638" cy="193" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="638" y="198" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">3</text>
+  <text x="656" y="199" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Encodeur</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="632" y="245" font-size="12.5" font-weight="600" fill="#1f2937">Qwen3-Embedding-0.6B</text>
+    <text x="632" y="265" font-size="12" fill="#4b5563">modèle multilingue</text>
+    <text x="632" y="283" font-size="12" fill="#4b5563">licence Apache 2.0</text>
+
+    <rect x="632" y="298" width="112" height="62" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="644" y="320" font-size="11.5" font-weight="600" fill="#1f2937">Processeur</text>
+    <text x="644" y="338" font-size="11" fill="#4b5563">device = cpu</text>
+    <text x="644" y="354" font-size="11" fill="#4b5563">dtype = float32</text>
+
+    <rect x="756" y="298" width="112" height="62" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="768" y="320" font-size="11.5" font-weight="600" fill="#1f2937">Encodage</text>
+    <text x="768" y="338" font-size="11" fill="#4b5563">lots de 8 textes</text>
+    <text x="768" y="354" font-size="11" fill="#4b5563">normalisation L2</text>
+
+    <text x="632" y="394" font-size="12.5" font-weight="600" fill="#1f2937">Sortie</text>
+    <text x="632" y="414" font-size="12" fill="#4b5563">1 024 nombres par texte</text>
+    <text x="632" y="432" font-size="12" fill="#4b5563">vecteurs unitaires prêts</text>
+    <text x="632" y="450" font-size="12" fill="#4b5563">pour le cosinus</text>
+  </g>
+
+  <!-- Étape 4 : stockage -->
+  <rect x="900" y="172" width="268" height="294" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="900" y="172" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="900" y="206" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="922" cy="193" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="922" y="198" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">4</text>
+  <text x="940" y="199" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Stockage</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="916" y="245" font-size="12.5" font-weight="600" fill="#1f2937">VecteurArticle</text>
+    <text x="916" y="265" font-size="12" fill="#4b5563">un vecteur par article</text>
+    <text x="916" y="283" font-size="12" fill="#4b5563">1 024 valeurs en JSON</text>
+    <text x="916" y="301" font-size="12" fill="#4b5563">supprimé avec l'article</text>
+
+    <text x="916" y="336" font-size="12.5" font-weight="600" fill="#1f2937">VecteurSujet</text>
+    <text x="916" y="356" font-size="12" fill="#4b5563">un vecteur par famille</text>
+    <text x="916" y="374" font-size="12" fill="#4b5563">nom, description, mots-clés</text>
+    <text x="916" y="392" font-size="12" fill="#4b5563">12 familles actives</text>
+
+    <text x="916" y="417" font-size="12.5" font-weight="600" fill="#1f2937">Champs de contrôle</text>
+    <text x="916" y="437" font-size="12" fill="#4b5563">modèle, dimension</text>
+    <text x="916" y="455" font-size="12" fill="#4b5563">et empreinte du texte</text>
+  </g>
+
+  <!-- Étape 5 : commande -->
+  <rect x="1184" y="172" width="268" height="294" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="1184" y="172" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="1184" y="206" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="1206" cy="193" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="1206" y="198" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">5</text>
+  <text x="1224" y="199" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Commande</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="1200" y="245" font-size="12.5" font-weight="600" fill="#1f2937">calculer_embeddings</text>
+    <text x="1200" y="265" font-size="12" fill="#4b5563">--sujets, --articles</text>
+    <text x="1200" y="283" font-size="12" fill="#4b5563">--limite N, --tout</text>
+    <text x="1200" y="301" font-size="12" fill="#4b5563">--simulation</text>
+
+    <text x="1200" y="336" font-size="12.5" font-weight="600" fill="#1f2937">Écriture par lots</text>
+    <text x="1200" y="356" font-size="12" fill="#4b5563">24 objets par lot</text>
+    <text x="1200" y="374" font-size="12" fill="#4b5563">update_or_create</text>
+    <text x="1200" y="392" font-size="12" fill="#4b5563">progression affichée</text>
+
+    <text x="1200" y="417" font-size="12.5" font-weight="600" fill="#1f2937">Bibliothèque</text>
+    <text x="1200" y="437" font-size="12" fill="#4b5563">optionnelle, le site</text>
+    <text x="1200" y="455" font-size="12" fill="#4b5563">fonctionne sans elle</text>
+  </g>
+
+  <!-- Flèches hors ligne -->
+  <path d="M 316 319 L 332 319" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+  <path d="M 600 319 L 616 319" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+  <path d="M 884 319 L 900 319" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+  <path d="M 1168 319 L 1184 319" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+
+  <!-- Section en ligne -->
+  <text x="48" y="506" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151" letter-spacing="1.4">CALCUL À LA REQUÊTE</text>
+  <text x="228" y="506" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" fill="#4b5563">GET /api/recommandations/moteur/</text>
+  <text x="1452" y="506" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" fill="#4b5563">lecture des vecteurs déjà enregistrés</text>
+
+  <!-- Profil -->
+  <rect x="48" y="522" width="268" height="296" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="48" y="522" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="48" y="556" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="70" cy="543" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="70" y="548" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">1</text>
+  <text x="88" y="549" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Profil du membre</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="64" y="595" font-size="12.5" font-weight="600" fill="#1f2937">Familles suivies</text>
+    <text x="64" y="615" font-size="12" fill="#4b5563">un poids de 0,2 à 1,0</text>
+    <text x="64" y="633" font-size="12" fill="#4b5563">par centre d'intérêt</text>
+
+    <text x="64" y="668" font-size="12.5" font-weight="600" fill="#1f2937">Sources suivies</text>
+    <text x="64" y="688" font-size="12" fill="#4b5563">préférence déclarée</text>
+    <text x="64" y="706" font-size="12" fill="#4b5563">pour une source</text>
+
+    <text x="64" y="741" font-size="12.5" font-weight="600" fill="#1f2937">Historique récent</text>
+    <text x="64" y="761" font-size="12" fill="#4b5563">articles lus les 7 derniers</text>
+    <text x="64" y="779" font-size="12" fill="#4b5563">jours, exclus du calcul</text>
+
+    <text x="64" y="808" font-size="11.5" font-style="italic" fill="#4b5563">Un profil vide reçoit un score de base.</text>
+  </g>
+
+  <!-- Candidats -->
+  <rect x="332" y="522" width="268" height="296" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="332" y="522" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="332" y="556" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="354" cy="543" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="354" y="548" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">2</text>
+  <text x="372" y="549" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Articles candidats</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="348" y="595" font-size="12.5" font-weight="600" fill="#1f2937">Sélection</text>
+    <text x="348" y="615" font-size="12" fill="#4b5563">articles visibles</text>
+    <text x="348" y="633" font-size="12" fill="#4b5563">publiés depuis 30 jours</text>
+    <text x="348" y="651" font-size="12" fill="#4b5563">non lus récemment</text>
+
+    <text x="348" y="686" font-size="12.5" font-weight="600" fill="#1f2937">Jointure</text>
+    <text x="348" y="706" font-size="12" fill="#4b5563">vecteurs du modèle et</text>
+    <text x="348" y="724" font-size="12" fill="#4b5563">de la dimension courants</text>
+
+    <text x="348" y="759" font-size="12.5" font-weight="600" fill="#1f2937">Compatibilité</text>
+    <text x="348" y="779" font-size="12" fill="#4b5563">un vecteur d'un autre modèle</text>
+    <text x="348" y="797" font-size="12" fill="#4b5563">est ignoré, jamais comparé</text>
+
+    <text x="348" y="812" font-size="11.5" font-style="italic" fill="#4b5563">Score minimal retenu : 0,02.</text>
+  </g>
+
+  <!-- Similarité -->
+  <rect x="616" y="522" width="268" height="296" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="616" y="522" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="616" y="556" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="638" cy="543" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="638" y="548" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">3</text>
+  <text x="656" y="549" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Similarité cosinus</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="632" y="595" font-size="12.5" font-weight="600" fill="#1f2937">cos(article, famille suivie)</text>
+    <text x="632" y="615" font-size="12" fill="#4b5563">produit scalaire de vecteurs</text>
+    <text x="632" y="633" font-size="12" fill="#4b5563">normalisés</text>
+
+    <text x="632" y="668" font-size="12.5" font-weight="600" fill="#1f2937">Affinité lisible</text>
+    <text x="632" y="688" font-size="12" fill="#4b5563">(cos - 0,35) / 0,35</text>
+    <text x="632" y="706" font-size="12" fill="#4b5563">bornée entre 0 et 1</text>
+
+    <text x="632" y="741" font-size="12.5" font-weight="600" fill="#1f2937">Meilleure famille</text>
+    <text x="632" y="761" font-size="12" fill="#4b5563">similarité multipliée par</text>
+    <text x="632" y="779" font-size="12" fill="#4b5563">le poids du suivi</text>
+
+    <text x="632" y="808" font-size="11.5" font-style="italic" fill="#4b5563">Aucun modèle chargé à la requête.</text>
+  </g>
+
+  <!-- Score -->
+  <rect x="900" y="522" width="268" height="296" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="900" y="522" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="900" y="556" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="922" cy="543" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="922" y="548" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">4</text>
+  <text x="940" y="549" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Score final</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="916" y="595" font-size="12.5" font-weight="600" fill="#1f2937">Pondération du score</text>
+
+    <rect x="916" y="606" width="10" height="10" fill="#111827"/>
+    <text x="934" y="616" font-size="12" fill="#374151">Sujet suivi</text>
+    <text x="1152" y="616" text-anchor="end" font-size="12" font-weight="600" fill="#111827">0,30</text>
+
+    <rect x="916" y="628" width="10" height="10" fill="#374151"/>
+    <text x="934" y="638" font-size="12" fill="#374151">Proximité sémantique</text>
+    <text x="1152" y="638" text-anchor="end" font-size="12" font-weight="600" fill="#111827">0,25</text>
+
+    <rect x="916" y="650" width="10" height="10" fill="#4b5563"/>
+    <text x="934" y="660" font-size="12" fill="#374151">Source suivie</text>
+    <text x="1152" y="660" text-anchor="end" font-size="12" font-weight="600" fill="#111827">0,20</text>
+
+    <rect x="916" y="672" width="10" height="10" fill="#6b7280"/>
+    <text x="934" y="682" font-size="12" fill="#374151">Récence</text>
+    <text x="1152" y="682" text-anchor="end" font-size="12" font-weight="600" fill="#111827">0,15</text>
+
+    <rect x="916" y="694" width="10" height="10" fill="#9ca3af"/>
+    <text x="934" y="704" font-size="12" fill="#374151">Qualité de l'article</text>
+    <text x="1152" y="704" text-anchor="end" font-size="12" font-weight="600" fill="#111827">0,10</text>
+
+    <text x="916" y="739" font-size="12.5" font-weight="600" fill="#1f2937">Raisons lisibles</text>
+    <text x="916" y="759" font-size="12" fill="#4b5563">Vous suivez MLOps.</text>
+    <text x="916" y="777" font-size="12" fill="#4b5563">Proche de votre domaine NLP.</text>
+
+    <text x="916" y="808" font-size="11.5" font-style="italic" fill="#4b5563">Chaque critère est expliqué à l'écran.</text>
+  </g>
+
+  <!-- Résultat -->
+  <rect x="1184" y="522" width="268" height="296" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="1184" y="522" width="268" height="42" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="1184" y="556" width="268" height="8" fill="#f8fafc"/>
+  <circle cx="1206" cy="543" r="11" fill="none" stroke="#374151" stroke-width="1.3"/>
+  <text x="1206" y="548" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">5</text>
+  <text x="1224" y="549" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#111827">Résultat</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="1200" y="595" font-size="12.5" font-weight="600" fill="#1f2937">Diversification</text>
+    <text x="1200" y="615" font-size="12" fill="#4b5563">deux articles maximum</text>
+    <text x="1200" y="633" font-size="12" fill="#4b5563">par source</text>
+
+    <text x="1200" y="668" font-size="12.5" font-weight="600" fill="#1f2937">Enregistrement</text>
+    <text x="1200" y="688" font-size="12" fill="#4b5563">score et affinité</text>
+    <text x="1200" y="706" font-size="12" fill="#4b5563">raisons lisibles</text>
+    <text x="1200" y="724" font-size="12" fill="#4b5563">famille la plus proche</text>
+
+    <text x="1200" y="759" font-size="12.5" font-weight="600" fill="#1f2937">API et page Pour vous</text>
+    <text x="1200" y="779" font-size="12" fill="#4b5563">/api/recommandations/</text>
+    <text x="1200" y="797" font-size="12" fill="#4b5563">moteur/</text>
+
+    <text x="1200" y="812" font-size="11.5" font-style="italic" fill="#4b5563">Trois articles par défaut.</text>
+  </g>
+
+  <!-- Flèches en ligne -->
+  <path d="M 316 670 L 332 670" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+  <path d="M 600 670 L 616 670" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+  <path d="M 884 670 L 900 670" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+  <path d="M 1168 670 L 1184 670" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#fleche)"/>
+
+  <!-- Principes -->
+  <text x="48" y="872" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#111827">Principes de conception</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#374151">
+    <text x="48" y="898">1. Les vecteurs sont calculés hors ligne, jamais pendant une requête HTTP.</text>
+    <text x="48" y="920">2. Un texte inchangé garde son vecteur et n'est pas recalculé.</text>
+    <text x="48" y="942">3. Le moteur lit des nombres enregistrés, sans charger le modèle.</text>
+    <text x="760" y="898">4. Un vecteur d'un autre modèle est écarté avant le calcul.</text>
+    <text x="760" y="920">5. Le score combine cinq critères visibles dans l'interface.</text>
+    <text x="760" y="942">6. Deux articles maximum par source pour garder la diversité.</text>
+  </g>
+
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4b5563">
+    <rect x="48" y="966" width="40" height="3" rx="1.5" fill="#374151"/>
+    <text x="98" y="972">enchaînement des étapes</text>
+    <text x="1452" y="972" text-anchor="end">Source : modules aggregator et recommender, VEILLIA</text>
+  </g>
+
+  <text x="750" y="996" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4b5563">Architecture du moteur de similarité</text>
+</svg>

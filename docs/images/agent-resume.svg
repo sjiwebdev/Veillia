@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1010" viewBox="0 0 1500 1010" role="img" aria-labelledby="titre desc">
+  <title id="titre">Architecture de l'agent de résumé VEILLIA</title>
+  <desc id="desc">Collecte des articles, analyse par Gemini avec secours OpenRouter, repli local, écriture en base et diffusion.</desc>
+
+  <defs>
+    <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151"/>
+    </marker>
+    <marker id="flecheClaire" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect width="1500" height="1010" fill="#ffffff"/>
+
+  <text x="48" y="46" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151" letter-spacing="1.6">VEILLIA / AGENT DE RÉSUMÉ</text>
+  <text x="48" y="84" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="600" fill="#111827">Agent de résumé des articles</text>
+  <text x="48" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#4b5563">Collecte, analyse par un modèle de langue, écriture des résumés et diffusion.</text>
+  <text x="1452" y="46" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#4b5563">Gemini en principal, OpenRouter en secours</text>
+  <text x="1452" y="68" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#4b5563">Le service reste disponible sans clé API</text>
+
+  <!-- Étape 1 -->
+  <rect x="48" y="160" width="252" height="594" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="48" y="160" width="252" height="46" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="48" y="198" width="252" height="8" fill="#f8fafc"/>
+  <circle cx="70" cy="183" r="12" fill="none" stroke="#374151" stroke-width="1.4"/>
+  <text x="70" y="188" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">1</text>
+  <text x="90" y="189" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#111827">Collecte</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="64" y="238" font-size="12.5" font-weight="600" fill="#1f2937">Flux RSS</text>
+    <text x="64" y="258" font-size="12" fill="#4b5563">Plus de 100 sources</text>
+
+    <text x="64" y="300" font-size="12.5" font-weight="600" fill="#1f2937">Nettoyage</text>
+    <text x="64" y="320" font-size="12" fill="#4b5563">Balises HTML, entités,</text>
+    <text x="64" y="338" font-size="12" fill="#4b5563">espaces et dates.</text>
+
+    <text x="64" y="378" font-size="12.5" font-weight="600" fill="#1f2937">Dédoublonnage</text>
+    <text x="64" y="398" font-size="12" fill="#4b5563">Identifiant stable calculé</text>
+    <text x="64" y="416" font-size="12" fill="#4b5563">à partir du lien.</text>
+
+    <text x="64" y="456" font-size="12.5" font-weight="600" fill="#1f2937">Article en base</text>
+    <text x="64" y="476" font-size="12" fill="#4b5563">Titre, texte, source,</text>
+    <text x="64" y="494" font-size="12" fill="#4b5563">date et image.</text>
+
+    <text x="64" y="534" font-size="12.5" font-weight="600" fill="#1f2937">Commande</text>
+    <text x="64" y="554" font-size="12" fill="#374151">enrichir_articles</text>
+    <text x="64" y="572" font-size="12" fill="#4b5563">ou resume --id</text>
+
+    <rect x="64" y="590" width="220" height="74" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="76" y="614" font-size="12" font-weight="600" fill="#1f2937">Sélection</text>
+    <text x="76" y="634" font-size="11.5" fill="#4b5563">Articles sans résumé,</text>
+    <text x="76" y="651" font-size="11.5" fill="#4b5563">ou à retraiter.</text>
+  </g>
+
+  <!-- Étape 2 -->
+  <rect x="328" y="160" width="330" height="594" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="328" y="160" width="330" height="46" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="328" y="198" width="330" height="8" fill="#f8fafc"/>
+  <circle cx="350" cy="183" r="12" fill="none" stroke="#374151" stroke-width="1.4"/>
+  <text x="350" y="188" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">2</text>
+  <text x="370" y="189" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#111827">Analyse</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="344" y="222" width="298" height="62" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="358" y="245" font-size="12.5" font-weight="600" fill="#1f2937">Préparation du texte</text>
+    <text x="358" y="265" font-size="11.5" fill="#4b5563">Titre et contenu tronqué</text>
+    <text x="358" y="281" font-size="11.5" fill="#4b5563">à 4 000 caractères.</text>
+
+    <rect x="344" y="298" width="298" height="62" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="358" y="321" font-size="12.5" font-weight="600" fill="#1f2937">Consigne</text>
+    <text x="358" y="341" font-size="11.5" fill="#4b5563">Rédacteur de veille,</text>
+    <text x="358" y="357" font-size="11.5" fill="#4b5563">réponse en JSON uniquement.</text>
+
+    <rect x="344" y="374" width="298" height="86" rx="4" fill="#ffffff" stroke="#9ca3af"/>
+    <text x="358" y="397" font-size="12.5" font-weight="600" fill="#111827">Gemini, appel principal</text>
+    <text x="358" y="417" font-size="11.5" fill="#374151">Trois essais sur erreur réseau</text>
+    <text x="358" y="433" font-size="11.5" fill="#374151">ou erreur serveur.</text>
+    <text x="358" y="449" font-size="11.5" fill="#374151">Arrêt propre si quota atteint.</text>
+
+    <rect x="344" y="474" width="298" height="62" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="358" y="497" font-size="12.5" font-weight="600" fill="#1f2937">OpenRouter, secours</text>
+    <text x="358" y="517" font-size="11.5" fill="#4b5563">Même contrat JSON.</text>
+    <text x="358" y="533" font-size="11.5" fill="#4b5563">Utilisé si Gemini échoue.</text>
+
+    <rect x="344" y="550" width="298" height="86" rx="4" fill="#ffffff" stroke="#9ca3af"/>
+    <text x="358" y="573" font-size="12.5" font-weight="600" fill="#111827">Contrôle de la réponse</text>
+    <text x="358" y="593" font-size="11.5" fill="#374151">Résumé de 900 caractères maximum.</text>
+    <text x="358" y="609" font-size="11.5" fill="#374151">Trois sujets, deux notes de 0 à 100.</text>
+    <text x="358" y="625" font-size="11.5" fill="#374151">Six mots-clés de 40 caractères maximum.</text>
+
+    <text x="358" y="674" font-size="11.5" font-style="italic" fill="#4b5563">Aucun appel réseau pendant une</text>
+    <text x="358" y="690" font-size="11.5" font-style="italic" fill="#4b5563">requête HTTP.</text>
+  </g>
+
+  <!-- Décision -->
+  <path d="M 760 310 L 850 372 L 760 434 L 670 372 Z" fill="#ffffff" stroke="#374151" stroke-width="1.5"/>
+  <text x="760" y="364" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#111827">Réponse</text>
+  <text x="760" y="381" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#111827">exploitable ?</text>
+  <text x="760" y="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" fill="#4b5563">JSON et types conformes</text>
+
+  <!-- Repli -->
+  <rect x="670" y="500" width="180" height="250" rx="6" fill="#f9fafb" stroke="#9ca3af" stroke-dasharray="5 4"/>
+  <text x="760" y="530" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#111827">3. Repli local</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="11.5" fill="#374151">
+    <text x="686" y="562" font-weight="600">Sans modèle disponible</text>
+    <text x="686" y="584">Trois premières phrases</text>
+    <text x="686" y="602">comme résumé.</text>
+    <text x="686" y="630" font-weight="600">Notes par règles simples</text>
+    <text x="686" y="652">Longueur du texte et</text>
+    <text x="686" y="670">mots forts du titre.</text>
+    <text x="686" y="698" font-weight="600">Classement</text>
+    <text x="686" y="720">Mots-clés des sujets.</text>
+    <text x="686" y="742" font-style="italic" fill="#4b5563">Toujours disponible.</text>
+  </g>
+
+  <!-- Étape 4 -->
+  <rect x="900" y="160" width="260" height="594" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="900" y="160" width="260" height="46" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="900" y="198" width="260" height="8" fill="#f8fafc"/>
+  <circle cx="922" cy="183" r="12" fill="none" stroke="#374151" stroke-width="1.4"/>
+  <text x="922" y="188" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">4</text>
+  <text x="942" y="189" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#111827">Écriture</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="916" y="222" width="228" height="82" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="930" y="245" font-size="12.5" font-weight="600" fill="#1f2937">Article.resume</text>
+    <text x="930" y="265" font-size="11.5" fill="#4b5563">Résumé final en français.</text>
+    <text x="930" y="282" font-size="11.5" fill="#4b5563">origine_resume = agent</text>
+    <text x="930" y="299" font-size="11.5" fill="#4b5563">ou flux pour le repli.</text>
+
+    <rect x="916" y="316" width="228" height="82" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="930" y="339" font-size="12.5" font-weight="600" fill="#1f2937">Classement</text>
+    <text x="930" y="359" font-size="11.5" fill="#4b5563">Trois familles de sujets.</text>
+    <text x="930" y="376" font-size="11.5" fill="#4b5563">Notes de qualité et de</text>
+    <text x="930" y="393" font-size="11.5" fill="#4b5563">pertinence, mots-clés.</text>
+
+    <rect x="916" y="410" width="228" height="92" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="930" y="433" font-size="12.5" font-weight="600" fill="#1f2937">JournalCollecte</text>
+    <text x="930" y="453" font-size="11.5" fill="#4b5563">Articles créés et mis à jour.</text>
+    <text x="930" y="470" font-size="11.5" fill="#4b5563">Erreurs et durée du passage.</text>
+    <text x="930" y="487" font-size="11.5" fill="#4b5563">Traçabilité de la collecte.</text>
+
+    <rect x="916" y="514" width="228" height="80" rx="4" fill="#ffffff" stroke="#9ca3af"/>
+    <text x="930" y="537" font-size="12.5" font-weight="600" fill="#111827">Écriture atomique</text>
+    <text x="930" y="557" font-size="11.5" fill="#374151">Un article est enregistré</text>
+    <text x="930" y="574" font-size="11.5" fill="#374151">entièrement ou pas du tout.</text>
+
+    <text x="930" y="628" font-size="11.5" font-style="italic" fill="#4b5563">Le texte d'origine reste</text>
+    <text x="930" y="645" font-size="11.5" font-style="italic" fill="#4b5563">inchangé.</text>
+  </g>
+
+  <!-- Étape 5 -->
+  <rect x="1190" y="160" width="262" height="594" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <rect x="1190" y="160" width="262" height="46" rx="6" fill="#f8fafc" stroke="#d1d5db"/>
+  <rect x="1190" y="198" width="262" height="8" fill="#f8fafc"/>
+  <circle cx="1212" cy="183" r="12" fill="none" stroke="#374151" stroke-width="1.4"/>
+  <text x="1212" y="188" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">5</text>
+  <text x="1232" y="189" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#111827">Diffusion</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="1206" y="238" font-size="12.5" font-weight="600" fill="#1f2937">API REST</text>
+    <text x="1206" y="258" font-size="11.5" fill="#4b5563">/api/articles/</text>
+    <text x="1206" y="275" font-size="11.5" fill="#4b5563">/api/articles/du_jour/</text>
+
+    <text x="1206" y="318" font-size="12.5" font-weight="600" fill="#1f2937">Pages React</text>
+    <text x="1206" y="338" font-size="11.5" fill="#4b5563">Accueil, articles du jour,</text>
+    <text x="1206" y="355" font-size="11.5" fill="#4b5563">recherche, détail.</text>
+
+    <text x="1206" y="398" font-size="12.5" font-weight="600" fill="#1f2937">Recherche et recommandations</text>
+    <text x="1206" y="418" font-size="11.5" fill="#4b5563">Mots-clés et vecteurs</text>
+    <text x="1206" y="435" font-size="11.5" fill="#4b5563">sémantiques.</text>
+
+    <text x="1206" y="478" font-size="12.5" font-weight="600" fill="#1f2937">Diffusion externe</text>
+    <text x="1206" y="498" font-size="11.5" fill="#4b5563">Résumés quotidiens lus</text>
+    <text x="1206" y="515" font-size="11.5" fill="#4b5563">par n8n, puis envoyés</text>
+    <text x="1206" y="532" font-size="11.5" fill="#4b5563">sur Telegram et WhatsApp.</text>
+
+    <text x="1206" y="575" font-size="12.5" font-weight="600" fill="#1f2937">Référencement</text>
+    <text x="1206" y="595" font-size="11.5" fill="#4b5563">Sitemaps, flux Atom,</text>
+    <text x="1206" y="612" font-size="11.5" fill="#4b5563">données JSON-LD.</text>
+  </g>
+
+  <!-- Flèches -->
+  <path d="M 300 377 L 328 377" fill="none" stroke="#374151" stroke-width="1.6" marker-end="url(#fleche)"/>
+  <path d="M 658 205 L 760 205 L 760 298" fill="none" stroke="#374151" stroke-width="1.6" marker-end="url(#fleche)"/>
+  <text x="700" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" fill="#374151">texte prêt</text>
+  <path d="M 850 372 L 900 372" fill="none" stroke="#374151" stroke-width="1.6" marker-end="url(#fleche)"/>
+  <text x="864" y="362" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" fill="#374151">oui</text>
+  <path d="M 760 434 L 760 488" fill="none" stroke="#6b7280" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#flecheClaire)"/>
+  <text x="770" y="462" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" fill="#374151">non</text>
+  <path d="M 850 625 L 876 625 L 876 470 L 900 470" fill="none" stroke="#6b7280" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#flecheClaire)"/>
+  <path d="M 1160 372 L 1190 372" fill="none" stroke="#374151" stroke-width="1.6" marker-end="url(#fleche)"/>
+
+  <!-- Notes -->
+  <text x="48" y="828" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#111827">Principes de conception</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#374151">
+    <text x="48" y="856">1. L'agent travaille en commande, jamais pendant une requête HTTP.</text>
+    <text x="48" y="878">2. Une panne de Gemini ou d'OpenRouter ne bloque pas la collecte.</text>
+    <text x="48" y="900">3. Le prompt ne contient que le texte public de l'article.</text>
+    <text x="760" y="856">4. Chaque sortie est bornée avant l'écriture en base.</text>
+    <text x="760" y="878">5. Le texte d'origine reste séparé du résumé produit.</text>
+    <text x="760" y="900">6. Le repli local garantit un résultat sans service externe.</text>
+  </g>
+
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4b5563">
+    <rect x="48" y="948" width="40" height="3" rx="1.5" fill="#374151"/>
+    <text x="98" y="954">flux principal</text>
+    <rect x="196" y="948" width="40" height="3" rx="1.5" fill="#9ca3af"/>
+    <text x="246" y="954">chemin de secours</text>
+    <text x="1452" y="954" text-anchor="end">Source : module aggregator, VEILLIA</text>
+  </g>
+
+  <text x="750" y="990" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#4b5563">Architecture de l'agent de résumé</text>
+</svg>
