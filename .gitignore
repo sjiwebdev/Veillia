@@ -1,0 +1,26 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Donnees locales
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# Variables d'environnement, elles ne doivent jamais etre versionnees
+.env
+
+# Fichiers temporaires
+*.log
+.vscode/
+.idea/
+# Cache ruff
+.ruff_cache/
