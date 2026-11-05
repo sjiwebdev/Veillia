@@ -398,7 +398,7 @@ git branch -vv
 Les trois branches doivent apparaître sur le dépôt distant, avec `main` comme
 branche par défaut.
 
-### Procédure pour l'enseignant
+### Procédure de clonage de ce dépôt git du projet Veillia
 
 1. Cloner le dépôt.
 2. Se placer sur `main`.
