@@ -20,7 +20,6 @@ traitements de fond : un agent de résumé et un moteur de similarité sémantiq
 - [Documentation](#documentation)
 - [Organisation Git du groupe](#organisation-git-du-groupe)
 - [Fusion sur la branche main](#fusion-sur-la-branche-main)
-- [Licence](#licence)
 
 ## Fonctionnalités
 
@@ -395,7 +394,3 @@ branche par défaut.
 4. Lancer les tests avec les commandes de la section précédente.
 5. Ouvrir `docs/06-guide-tests.md` pour la procédure de recette complète.
 6. Ouvrir `http://localhost:8000/api/docs/` après démarrage pour tester l'API.
-
-## Licence
-
-Projet académique, usage pédagogique. 
