@@ -80,7 +80,7 @@ part sémantique.
 
 ### 3. Configuration
 
-Copier `.env.exemple` en `.env`, puis renseigner les valeurs locales.
+Copier `.env.exemple` en `.env`, puis remplacer les valeurs par les votres.
 
 ```bash
 cp .env.exemple .env
@@ -94,7 +94,7 @@ Copy-Item .env.exemple .env
 
 Les variables obligatoires sont `DJANGO_SECRET_KEY`, `DJANGO_DEBUG`,
 `DJANGO_ALLOWED_HOSTS` et `SITE_URL`. Les clés Gemini, OpenRouter, GitHub et
-LinkedIn sont facultatives pour un essai local.
+LinkedIn sont facultatives pour tester la plateforme en local.
 
 ### 4. Base de données
 
@@ -131,10 +131,8 @@ uv run python manage.py runserver
 | `http://localhost:8000/robots.txt` | règles pour les robots |
 | `http://localhost:8000/sitemap.xml` | plan du site |
 
-Comptes de démonstration utilisés pendant le développement : `admin` /
-`Veillia2024!` et `demo` / `Demo2024!`. Ces comptes ne doivent pas être conservés
-tels quels en production.
-
+Comptes de démonstration que nous avons utilisés pendant le développement en local : `admin` /
+`Veillia2024!` et `demo` / `Demo2024!`.
 ## Interface React
 
 ```bash
@@ -144,10 +142,9 @@ npm run dev
 ```
 
 L'interface démarre sur `http://localhost:5173`. Elle attend l'API sur
-`http://localhost:8000`. L'adresse se règle dans `frontend/.env` avec
-`VITE_API_URL`.
+`http://localhost:8000`. L'adresse de nom de domaine est ajoutée dans `frontend/.env` avec `VITE_API_URL`.
 
-Commandes utiles :
+Commandes du frontend (cd frontend) :
 
 ```bash
 npm run lint
@@ -257,14 +254,13 @@ pages React et le test de chaque point d'entrée depuis Swagger.
 ## Organisation Git du groupe
 
 Le projet est réparti sur trois branches de travail, une par membre. Chaque
-branche contient les commits de son auteur. Les 125 fichiers sont répartis en
-30 commits, à raison de 10 commits par membre.
+branche contient tous les commit effectues par chaque auteur.
 
 | Membre | Pseudo | Branche | Adresse de commit |
 | --- | --- | --- | --- |
-| NGOUMTSOP TEUZEM Yeiayel | `teuzem` | `yeiayel` | `teuzem@users.noreply.github.com` |
-| KAMGUENG YOLONG Ariane Sonita | `@Ariane-git` | `ariane` | `Ariane-git@users.noreply.github.com` |
-| TONFACK MATENGUE Elvira Brenda | `MatengueElvira` | `elvira` | `MatengueElvira@users.noreply.github.com` |
+| NGOUMTSOP TEUZEM Yeiayel | `teuzem` | `yeiayel` | `digitalproservicesofficiel@gmail.com` |
+| KAMGUENG YOLONG Ariane Sonita | `@Ariane-git` | `ariane` | `sonitakamguen23@gmail.com` |
+| TONFACK MATENGUE Elvira Brenda | `MatengueElvira` | `elvira` | `brendaelvira182@gmail.com` |
 
 | Membre | Branche | Commits | Fichiers | Lignes hors verrous |
 | --- | --- | --- | --- | --- |
@@ -280,11 +276,6 @@ Le détail des fichiers, commit par commit, se trouve dans
 [`docs/07-plan-commits.md`](docs/07-plan-commits.md). Les commandes pour créer
 les commits, pousser le projet et fusionner les branches sont dans
 [`docs/08-guide-git.md`](docs/08-guide-git.md).
-
-Les commits sont volontairement nombreux et courts. Chaque commit traite un
-sujet : un modèle, une vue, un composant, une page ou un document. Cette
-organisation rend l'historique lisible et permet de retrouver rapidement
-l'origine d'une modification.
 
 ### Consulter l'historique
 
@@ -305,7 +296,7 @@ git show --stat <identifiant-du-commit>
 ## Fusion sur la branche main
 
 La branche `main` ne contient au départ qu'un commit racine vide. Les trois
-branches sont fusionnées à la suite, dans l'ordre choisi par le groupe. Les
+branches sont fusionnées à la suite de tous les commit de tous les membres du groupe. Les
 fichiers étant répartis entre les branches, les fusions se font sans conflit.
 La procédure complète, avec la création des commits et le push, est décrite dans
 [`docs/08-guide-git.md`](docs/08-guide-git.md).
@@ -347,7 +338,7 @@ git status
 ```
 
 L'arbre doit montrer les trois branches reliées à `main` par trois commits de
-fusion. Le dossier de travail doit être propre.
+fusion. Le dossier de travail est donc au complet.
 
 ### 6. Lancer les vérifications après fusion
 
@@ -419,4 +410,4 @@ branche par défaut.
 
 ## Licence
 
-Projet académique, usage pédagogique.
+Projet académique, usage pédagogique. 
