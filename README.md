@@ -244,8 +244,6 @@ pages React et le test de chaque point d'entrée depuis Swagger.
 | [`docs/04-api-et-exploitation.md`](docs/04-api-et-exploitation.md) | points d'entrée, conventions, mise en production et sauvegardes |
 | [`docs/05-moteur-embeddings.md`](docs/05-moteur-embeddings.md) | modèle Qwen3, calcul des vecteurs, score à cinq critères et limites |
 | [`docs/06-guide-tests.md`](docs/06-guide-tests.md) | tests backend, frontend et API Swagger |
-| [`docs/07-plan-commits.md`](docs/07-plan-commits.md) | répartition des 125 fichiers en 30 commits sur trois branches |
-| [`docs/08-guide-git.md`](docs/08-guide-git.md) | création des commits, push sur GitHub et fusion sur main |
 | [`docs/images/agent-resume.svg`](docs/images/agent-resume.svg) | schéma d'architecture de l'agent de résumé |
 | [`docs/images/agent-embeddings.svg`](docs/images/agent-embeddings.svg) | schéma d'architecture du moteur de similarité |
 | [`docs/sources.json`](docs/sources.json) | liste de sources testées, prête à importer |
@@ -262,20 +260,13 @@ branche contient tous les commit effectues par chaque auteur.
 | KAMGUENG YOLONG Ariane Sonita | `@Ariane-git` | `ariane` | `sonitakamguen23@gmail.com` |
 | TONFACK MATENGUE Elvira Brenda | `MatengueElvira` | `elvira` | `brendaelvira182@gmail.com` |
 
-| Membre | Branche | Commits | Fichiers | Lignes hors verrous |
-| --- | --- | --- | --- | --- |
-| NGOUMTSOP TEUZEM Yeiayel | `yeiayel` | 10 | 42 | 6159 |
-| KAMGUENG YOLONG Ariane Sonita | `ariane` | 10 | 41 | 6118 |
-| TONFACK MATENGUE Elvira Brenda | `elvira` | 10 | 42 | 6434 |
-| **Total** | | **30** | **125** | **18711** |
+| Membre | Branche | 
+| --- | --- | 
+| NGOUMTSOP TEUZEM Yeiayel | `yeiayel` |
+| KAMGUENG YOLONG Ariane Sonita | `ariane` | 
+| TONFACK MATENGUE Elvira Brenda | `elvira` | 
 
-Les lignes hors verrous excluent `uv.lock` et `package-lock.json`. Chaque branche
-couvre plusieurs domaines du projet : backend, interface et documentation.
 
-Le détail des fichiers, commit par commit, se trouve dans
-[`docs/07-plan-commits.md`](docs/07-plan-commits.md). Les commandes pour créer
-les commits, pousser le projet et fusionner les branches sont dans
-[`docs/08-guide-git.md`](docs/08-guide-git.md).
 
 ### Consulter l'historique
 
@@ -296,10 +287,7 @@ git show --stat <identifiant-du-commit>
 ## Fusion sur la branche main
 
 La branche `main` ne contient au départ qu'un commit racine vide. Les trois
-branches sont fusionnées à la suite de tous les commit de tous les membres du groupe. Les
-fichiers étant répartis entre les branches, les fusions se font sans conflit.
-La procédure complète, avec la création des commits et le push, est décrite dans
-[`docs/08-guide-git.md`](docs/08-guide-git.md).
+branches sont fusionnées à la suite de tous les commit de tous les membres du groupe.
 
 ### 1. Se placer sur main et vérifier l'état
 
